@@ -1,5 +1,9 @@
-FROM python:2.7-onbuild
+FROM python:3.6
+
+RUN mkdir /code
+
+COPY hello-world.py /code
 
 EXPOSE 80
 
-ENTRYPOINT ["python", "/usr/src/app/hello-world.py"]
+ENTRYPOINT ["python3", "/code/hello-world.py"]

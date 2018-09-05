@@ -1,35 +1,25 @@
-#!/usr/bin/python
-import subprocess,os
-from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import time
 
-PORT_NUMBER = 80
+hostName = "0.0.0.0"
+hostPort = 80
 
-#This class will handles any incoming request from
-#the browser 
-class myHandler(BaseHTTPRequestHandler):
+class MyServer(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(bytes("<html><head><title>Title</title></head>", "utf-8"))
+        self.wfile.write(bytes("<body><p>Hello World, v4</p>", "utf-8"))
+        self.wfile.write(bytes("</body></html>", "utf-8"))
 
-  #Handler for the GET requests
-  def do_GET(self):
-    self.send_response(200)
-    self.send_header('Content-type','text/html')
-    self.end_headers()
-    # Send the html message
-    self.wfile.write("*** Python - Hello World ! ***\n")
-    self.wfile.write("WELCOME_MSG : " + os.getenv('WELCOME_MSG', 'undef') )
-    self.wfile.write("\n")
-    self.wfile.write("Hostname is : " + subprocess.check_output("uname -n", shell=True))
-    self.wfile.write("Process ID  : " + str(os.getpid()))
-    return
+myServer = HTTPServer((hostName, hostPort), MyServer)
+print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
 
 try:
-  #Create a web server and define the handler to manage the
-  #incoming request
-  server = HTTPServer(('', PORT_NUMBER), myHandler)
-  print 'Started httpserver on port ' , PORT_NUMBER
-
-  #Wait forever for incoming htto requests
-  server.serve_forever()
-
+    myServer.serve_forever()
 except KeyboardInterrupt:
-  print '^C received, shutting down the web server'
-  server.socket.close()
+    pass
+
+myServer.server_close()
+print(time.asctime(), "Server Stops - %s:%s" % (hostName, hostPort))
