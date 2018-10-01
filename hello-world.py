@@ -10,7 +10,7 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write(bytes("<html><head><title>Title</title></head>", "utf-8"))
-        self.wfile.write(bytes("<body><p>Hello World, App Service!</p>", "utf-8"))
+        self.wfile.write(bytes("<body><p>Hello World!</p>", "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))
 
 myServer = HTTPServer((hostName, hostPort), MyServer)
